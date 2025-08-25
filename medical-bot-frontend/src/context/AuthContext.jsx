@@ -59,9 +59,14 @@ export function AuthProvider({ children }) {
       async google(idToken) {
         const res = await api.googleLogin(idToken);
         if (res.user && res.token) {
+          // Ensure we have the complete user profile
           setSession({
             token: res.token,
-            user: res.user
+            user: {
+              ...res.user,
+              name: res.user.name || res.user.email.split('@')[0],
+              picture: res.user.picture || null
+            }
           });
           return res.user;
         }

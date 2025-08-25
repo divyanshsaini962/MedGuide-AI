@@ -2,9 +2,9 @@
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import User from "../models/User.js";
-import { JWT_SECRET, GOOGLE_CLIENT_ID } from "../config/index.js";
+import { JWT_SECRET } from "../config/index.js";
 
-const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // -------------------- helpers --------------------
 function createToken(userId) {
@@ -96,7 +96,7 @@ export async function googleLogin(req, res, next) {
     // Verify token with Google
     const ticket = await googleClient.verifyIdToken({
       idToken,
-      audience: GOOGLE_CLIENT_ID,
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
 
